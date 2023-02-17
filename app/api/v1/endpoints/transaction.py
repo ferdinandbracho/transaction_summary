@@ -8,6 +8,7 @@ from fastapi import (
 from app.schemas.summary import Summary
 import pandas as pd
 from app.db.session import get_db
+from app.utils import list_sum, list_avg, month_counter
 
 # Init router
 router = APIRouter()
@@ -79,29 +80,27 @@ async def import_csv_transactions(
         }
     }
 
-    # init counters
-    row = 1
+    # init needed variables
     records = rfile.to_dict('records')
-    total = 0
+    debit_list = [x['Transaction'] for x in records if x['Transaction'] > 0]
+    credit_list = [x['Transaction'] for x in records if x['Transaction'] < 0]
+    dates = [x['Date'] for x in records]
 
-    # iterate through each record to analyze and validate
-    for r in records:
-        row += 1
-        fail_validation = False
+    # setting data to send email and save
+    total_debit = list_sum(debit_list)
+    total_credit = list_sum(credit_list)
+    total_balance = total_debit - total_credit
+    avg_debit = list_avg(debit_list)
+    avg_credit = list_avg(credit_list)
+    month_transactions = month_counter(dates)
 
-        if r['Transaction'] < 0:
-            total -= r['Transaction']
+    print(month_transactions)
 
 
-    # {'id': 1, 'Date': '7/15', 'Transaction': 60.5}
-    # {'id': 2, 'Date': '8/2', 'Transaction': -61.5}
-    # {'id': 3, 'Date': '8/13', 'Transaction': 62.5}
+    return
+    db.add(record_to_create)
 
-        continue
-
-        db.add(record_to_create)
-
-        db.flush()
+    db.flush()
 
     return f'-{total}'
     db.commit()
