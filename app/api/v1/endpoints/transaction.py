@@ -6,9 +6,10 @@ from fastapi import (
     UploadFile
 )
 from  app.models import summary as Sy
-from app.schemas.summary import Summary
+from app.schemas.summary import SummaryItem
 from app.db.session import engine
 import pandas as pd
+from typing import List
 from app.db.session import get_db
 from app.utils import list_sum, list_avg, month_counter
 
@@ -75,15 +76,6 @@ async def import_csv_transactions(
             response.status_code = status.HTTP_400_BAD_REQUEST
             return  'ER03: Invalid csv structure'
 
-    # Formatting the return dict
-    upload_result = {
-        'summary': {
-            'total_balance': 0,
-            'avg_debit': 0,
-            'avg_credit': 0,
-            'number_transactions': {},
-        }
-    }
 
     # Init needed variables
     records = rfile.to_dict('records')
@@ -110,20 +102,47 @@ async def import_csv_transactions(
     db.add(summary)
     db.commit()
 
-    for a in db.query(Sy.Summary).all():
-        print(a)
+
+    # Return
+    return summary
 
 
-    return
-    db.add(record_to_create)
+@router.get(
+    '/list',
+    status_code=status.HTTP_200_OK,
+)
+async def get_summary_history(
+    response: Response,
+    db = Depends(get_db)
+) -> List:
+    """
+    ## Retrieve summary history
 
-    db.flush()
+    **Return:**
 
-    return f'-{total}'
-    db.commit()
+        List of summaries
+    """
 
-    # setting finales data to return
-    upload_err_results['summary']['success_total_count'] = success_counter
-    upload_err_results['summary']['errors_total_count'] = error_counter
+    try:
+        # Search for all summaries
+        Summaries = db.query(Sy.Summary).all()
 
-    return upload_err_results
+    except Exception as e:
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return {
+            "description": "Server Error",
+            "exception": str(e)
+        }
+
+    res = []
+
+    for summary in Summaries:
+        res.append(SummaryItem(
+            total_balance = summary.total_balance,
+            avg_debit = summary.avg_debit,
+            avg_credit = summary.avg_credit,
+            month_transactions = summary.month_transactions
+        ))
+
+    # Return
+    return res
