@@ -11,7 +11,9 @@ from app.db.session import engine
 import pandas as pd
 from typing import List
 from app.db.session import get_db
-from app.utils import list_sum, list_avg, month_counter
+from app.utils import list_sum, list_avg, month_counter, send_email
+import app.config as config
+
 
 
 Sy.Base.metadata.create_all(bind=engine)
@@ -24,18 +26,23 @@ router = APIRouter()
 async def import_csv_transactions(
     response: Response,
     file: UploadFile,
+    user_email: str = None,
     db=Depends(get_db),
 ):
     """
 
-    ## **Upload transactions history csv:**
+    ## **Upload transactions history csv and send account summary if email:**
+
+    **Query params:**
+
+        user_email:
+            str: optional valid email to send account summary
 
     **Return:**
 
         if success execution:
             - http 200 ok
-            - Obj with
-                - Nested obj with a summary[success count, errors count]
+            - Obj with summary data
 
         if fail execution:
             - http 400 Bad request
@@ -86,24 +93,36 @@ async def import_csv_transactions(
     # Setting data to send email and save in db
     total_debit = list_sum(debit_list)
     total_credit = list_sum(credit_list)
-    total_balance = total_debit + total_credit
-    avg_debit = list_avg(debit_list)
-    avg_credit = list_avg(credit_list)
-    month_transactions = month_counter(dates)
+    summary_data = {
+        'total_balance' : total_debit + total_credit,
+        'avg_debit' : list_avg(debit_list),
+        'avg_credit' : list_avg(credit_list),
+        'month_transactions' : month_counter(dates),
+    }
 
     # Setting Summary obj
     summary = Sy.Summary(
-        total_balance = round(total_balance, 2),
-        avg_debit = avg_debit,
-        avg_credit = avg_credit,
-        month_transactions = month_transactions
+        user_email = user_email,
+        total_balance = round(summary_data['total_balance'], 2),
+        avg_debit = summary_data['avg_debit'],
+        avg_credit = summary_data['avg_credit'],
+        month_transactions = summary_data['month_transactions']
     )
 
+    # Send to db
     db.add(summary)
     db.commit()
 
+    # If user email send email
+    if user_email:
+        send_email(
+            to_email=user_email,
+            subject='Account summary',
+            template_id=config.SUMMARY_TEMPLATE_ID,
+            data=summary_data
+            )
 
-    # Return
+    print(summary)
     return summary
 
 
@@ -114,7 +133,7 @@ async def import_csv_transactions(
 async def get_summary_history(
     response: Response,
     db = Depends(get_db)
-) -> List:
+) -> List[SummaryItem]:
     """
     ## Retrieve summary history
 
@@ -126,7 +145,6 @@ async def get_summary_history(
     try:
         # Search for all summaries
         Summaries = db.query(Sy.Summary).all()
-
     except Exception as e:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return {
@@ -138,11 +156,13 @@ async def get_summary_history(
 
     for summary in Summaries:
         res.append(SummaryItem(
+            id=summary.id,
+            user_email=summary.user_email,
             total_balance = summary.total_balance,
             avg_debit = summary.avg_debit,
             avg_credit = summary.avg_credit,
-            month_transactions = summary.month_transactions
+            month_transactions = summary.month_transactions,
+            created_at=summary.created_at
         ))
 
-    # Return
     return res
