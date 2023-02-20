@@ -105,6 +105,7 @@ FastApi project, currently with two endpoints:
     docker compose up --build
     ```
 - After the build of the "docker" image, creation and execution of the container the user can go to http://0.0.0.0:8000/docs to the interactive openApi documentation and test "endpoints" from there, also can run request on the server from any client (Web, mobile or an app like postman)
+- [Test CSV](https://github.com/ferdinandbracho/transaction_summary_maker/blob/0bf4dd6ba3dcf627160c6220ed0a1dac4ec27910/test.csv)
 
 ## RoadMap
 - Connect to postgres db - *since we currently use sqlite this is just a minor tweak*
