@@ -47,7 +47,7 @@ FastApi project, currently with two endpoints:
         }
         ```
 
-  - [Email](docs_img/Screenshot from 2023-02-20 08-26-46.png)
+  - ![Email](https://github.com/ferdinandbracho/transaction_summary_maker/blob/cde121f5a2f9f861188bc235ff13a476804a6db3/docs_img/Screenshot%20from%202023-02-20%2008-26-46.png)
 
 - **/List** - Dedicated to retrieve a list of summaries logs in database
     - ``` json
