@@ -27,11 +27,12 @@ System dedicated to create summaries of transactions.
 
 ## **Details**
 FastApi project, currently with two endpoints:
-- **/import** - Dedicated to import valid csv file to analyze and summarize data, if user emails is provided then this endpoint triggers an email sender with the summarized data
+- **/import** - Endppoint dedicated to import valid csv file to analyze and summarize data, if user emails is provided then this endpoint triggers an email sender with the summarized data
 
     - This endpoint validate 1)if files is valid, 2)also if is a csv and 3)lastly if the column structure if the expected, in any of this case the error is indicated to the user
-    - When success create a database entry and response this to the user and send email with summary to indicated email (optional)
-    - ``` json
+    - When procss csv is success it create a database entry and response this data to the user, send email with summary to indicated email (optional)
+   ### **Resnpose Body **
+   -  ``` json
         // Response and  log in database
         {
             "id": 1,
@@ -47,9 +48,11 @@ FastApi project, currently with two endpoints:
         }
         ```
 
+
+  ### **Email Tempalte**
   - ![Email](https://github.com/ferdinandbracho/transaction_summary_maker/blob/cde121f5a2f9f861188bc235ff13a476804a6db3/docs_img/Screenshot%20from%202023-02-20%2008-26-46.png)
 
-- **/List** - Dedicated to retrieve a list of summaries logs in database
+- **/List** - Endppoint dedicated to retrieve a list of summaries logs in database
     - ``` json
             // List response
         [
@@ -101,7 +104,7 @@ FastApi project, currently with two endpoints:
     ``` sh
     docker compose up --build
     ```
-- After the build of the "docker" image, creation and execution of the container the user can go to http://0.0.0.0:8000/docs to the interactive openApi documentation and test "endpoints" from there, also can run request on the server from any client web or an app like postman
+- After the build of the "docker" image, creation and execution of the container the user can go to http://0.0.0.0:8000/docs to the interactive openApi documentation and test "endpoints" from there, also can run request on the server from any client (Web, mobile or an app like postman)
 
 ## RoadMap
 - Connect to postgres db - *since we currently use sqlite this is just a minor tweak*
@@ -113,5 +116,5 @@ FastApi project, currently with two endpoints:
 
 ## Extra Note
 - *Waiting for twilio sendgrid account restoration*
-- The integration is complete but for some reason sendgrid ask for extra info about the usage of the account, is already provide by the dev but still under revision
+- The integration is complete but for some reason sendgrid ask for extra information about the usage of the account, is already provided by the developer but still under revision
  ![integration Complete](https://github.com/ferdinandbracho/transaction_summary_maker/blob/fd38b59a0bc45163f588a07d16250475396298cb/docs_img/Screenshot%20from%202023-02-20%2009-10-28.png)
