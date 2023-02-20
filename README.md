@@ -112,6 +112,6 @@ FastApi project, currently with two endpoints:
 - Create web client to test api integration (to create summaries and to list then)
 
 ## Extra Note
-    - * Waiting for twilio sendgrid account restoration
-     - The integration is complete but for some reason sendgrid ask for extra info about the usage of the account, is already provide by the dev but still under revision
-     ![integration Complete]()
+- *Waiting for twilio sendgrid account restoration*
+- The integration is complete but for some reason sendgrid ask for extra info about the usage of the account, is already provide by the dev but still under revision
+ ![integration Complete](https://github.com/ferdinandbracho/transaction_summary_maker/blob/fd38b59a0bc45163f588a07d16250475396298cb/docs_img/Screenshot%20from%202023-02-20%2009-10-28.png)
