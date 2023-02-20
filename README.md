@@ -101,4 +101,12 @@ FastApi project, currently with two endpoints:
     ``` sh
     docker compose up --build
     ```
-- After the build of the docker image and creation and execution of the container user can go to http://0.0.0.0:8000
+- After the build of the "docker" image, creation and execution of the container the user can go to http://0.0.0.0:8000/docs to the interactive openApi documentation and test "endpoints" from there, also can run request on the server from any client web or an app like postman
+
+## RoadMap
+- Connect to postgres db - *since we currently use sqlite this is just a minor tweak*
+- Adding extra validation to csv data, e.g Validate if all transactions data are valid numbers, of if the transactions id are unique
+- Change the deploy architecture, instead of using a server in AWS EC2, change to a serverless approach and use AWS LAMBDA
+    - S3 Post/Put Trigger to call the function
+    - Use [Magnun](https://pypi.org/project/magnum/) python package to prepare handler
+- Create web client to test api integration (to create summaries and to list then)
