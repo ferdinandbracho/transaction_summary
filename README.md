@@ -29,7 +29,7 @@ System dedicated to create summaries of transactions.
 FastApi project, currently with two endpoints:
 - **/import** - Dedicated to import valid csv file to analyze and summarize data, if user emails is provided then this endpoint triggers an email sender with the summarized data
 
-    - Validated if files is valid, also if is a csv and lastly if the column structure if the expected, in any of this case the error is indicated to the user
+    - This endpoint validate 1)if files is valid, 2)also if is a csv and 3)lastly if the column structure if the expected, in any of this case the error is indicated to the user
     - When success create a database entry and response this to the user and send email with summary to indicated email (optional)
     - ``` json
         // Response and  log in database
