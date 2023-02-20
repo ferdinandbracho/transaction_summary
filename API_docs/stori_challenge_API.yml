@@ -1,0 +1,154 @@
+openapi: 3.0.2
+info:
+  title: Story Challenge
+  description: "## System dedicated to create summaries of transactions."
+  version: 0.1.0
+paths:
+  /import:
+    post:
+      tags:
+        - Summary Transactions
+      summary: Import Csv Transactions
+      description: |-
+        ## **Upload transactions history csv and send account summary if email:**
+
+        **Query params:**
+
+            user_email:
+                str: optional valid email to send account summary
+
+        **Return:**
+
+            if success execution:
+                - http 200 ok
+                - Obj with summary data
+
+            if fail execution:
+                - http 400 Bad request
+                - Code internal error
+                    - ER01: File cant be read
+                    - ER02: Incorrect file not csv
+                    - ER03: Invalid csv structure
+      operationId: import_csv_transactions_import_post
+      parameters:
+        - required: false
+          schema:
+            title: User Email
+            type: string
+          name: user_email
+          in: query
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_import_csv_transactions_import_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /list:
+    get:
+      tags:
+        - Summary Transactions
+      summary: Get Summary History
+      description: |-
+        ## Retrieve summary history
+
+        **Return:**
+
+            List of summaries
+      operationId: get_summary_history_list_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Response Get Summary History List Get
+                type: array
+                items:
+                  $ref: '#/components/schemas/SummaryItem'
+components:
+  schemas:
+    Body_import_csv_transactions_import_post:
+      title: Body_import_csv_transactions_import_post
+      required:
+        - file
+      type: object
+      properties:
+        file:
+          title: File
+          type: string
+          format: binary
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    SummaryItem:
+      title: SummaryItem
+      required:
+        - id
+        - total_balance
+        - avg_debit
+        - avg_credit
+        - month_transactions
+        - created_at
+      type: object
+      properties:
+        id:
+          title: Id
+          type: integer
+        user_email:
+          title: User Email
+          type: string
+        total_balance:
+          title: Total Balance
+          type: number
+        avg_debit:
+          title: Avg Debit
+          type: number
+        avg_credit:
+          title: Avg Credit
+          type: number
+        month_transactions:
+          title: Month Transactions
+          type: object
+        created_at:
+          title: Created At
+          type: string
+          format: date-time
+    ValidationError:
+      title: ValidationError
+      required:
+        - loc
+        - msg
+        - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
