@@ -110,3 +110,8 @@ FastApi project, currently with two endpoints:
     - S3 Post/Put Trigger to call the function
     - Use [Magnun](https://pypi.org/project/magnum/) python package to prepare handler
 - Create web client to test api integration (to create summaries and to list then)
+
+## Extra Note
+    - * Waiting for twilio sendgrid account restoration
+     - The integration is complete but for some reason sendgrid ask for extra info about the usage of the account, is already provide by the dev but still under revision
+     ![integration Complete]()
