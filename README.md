@@ -108,13 +108,9 @@ FastApi project, currently with two endpoints:
 
 ## RoadMap
 - Connect to postgres db - *since we currently use sqlite this is just a minor tweak*
-- Adding extra validation to csv data, e.g Validate if all transactions data are valid numbers, of if the transactions id are unique
 - Change the deploy architecture, instead of using a server in AWS EC2, change to a serverless approach and use AWS LAMBDA
     - S3 Post/Put Trigger to call the function
     - Use [Magnun](https://pypi.org/project/magnum/) python package to prepare handler
+- Adding extra validation to csv data, e.g Validate if all transactions data are valid numbers, of if the transactions id are unique
+- Implement Python Logging
 - Create web client to test api integration (to create summaries and to list then)
-
-## Extra Note
-- *Waiting for twilio sendgrid account restoration*
-- The integration is complete but for some reason sendgrid ask for extra information about the usage of the account, is already provided by the developer but still under revision
- ![integration Complete](https://github.com/ferdinandbracho/transaction_summary_maker/blob/fd38b59a0bc45163f588a07d16250475396298cb/docs_img/Screenshot%20from%202023-02-20%2009-10-28.png)
