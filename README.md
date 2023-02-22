@@ -50,7 +50,7 @@ FastApi project, currently with two endpoints:
 
 
   ### **Email Tempalte**
-  - ![Email](https://github.com/ferdinandbracho/transaction_summary_maker/blob/cde121f5a2f9f861188bc235ff13a476804a6db3/docs_img/Screenshot%20from%202023-02-20%2008-26-46.png)
+  - ![Email](https://github.com/ferdinandbracho/transaction_summary_maker/blob/5f36ada17039b28809b8d827ef0b00840793ffcd/docs_img/Screenshot%20from%202023-02-22%2009-35-40.png)
 
 - **/List** - Endppoint dedicated to retrieve a list of summaries logs in database
     - ``` json
