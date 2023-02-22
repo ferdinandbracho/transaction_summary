@@ -94,7 +94,7 @@ async def import_csv_transactions(
     total_debit = list_sum(debit_list)
     total_credit = list_sum(credit_list)
     summary_data = {
-        'total_balance' : total_debit + total_credit,
+        'total_balance' : round(total_debit + total_credit, 2),
         'avg_debit' : list_avg(debit_list),
         'avg_credit' : list_avg(credit_list),
         'month_transactions' : month_counter(dates),
@@ -103,11 +103,12 @@ async def import_csv_transactions(
     # Setting Summary obj
     summary = Sy.Summary(
         user_email = user_email,
-        total_balance = round(summary_data['total_balance'], 2),
+        total_balance = summary_data['total_balance'],
         avg_debit = summary_data['avg_debit'],
         avg_credit = summary_data['avg_credit'],
         month_transactions = summary_data['month_transactions']
     )
+
 
     # Send to db
     db.add(summary)

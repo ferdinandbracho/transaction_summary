@@ -49,11 +49,16 @@ def send_email(to_email, subject, template_id, data) -> bool:
         subject=subject,
     )
     message.template_id = template_id
+
+    month_transactions_str = ''
+    for i in data['month_transactions']:
+        month_transactions_str += f'{i}: {data["month_transactions"][i]} \n'
+
     message.dynamic_template_data = {
         'total': data['total_balance'],
         'avg_debit': data['avg_debit'],
         'avg_credit': data['avg_credit'],
-        'month_transactions': data['month_transactions'],
+        'month_transactions': month_transactions_str,
     }
     try:
         sg = SendGridAPIClient(config.SENDGRID_API_KEY)
