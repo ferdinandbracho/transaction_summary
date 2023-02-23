@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  title: Story Challenge
+  title: Transactions Summary
   description: "## System dedicated to create summaries of transactions."
   version: 0.1.0
 paths:
