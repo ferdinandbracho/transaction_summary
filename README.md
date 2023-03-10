@@ -2,7 +2,8 @@
 
 System dedicated to create summaries of transactions.
 
-**Live API** (Documentation and testing) -> http://54.151.11.102/docs#/
+    
+ ~**Live API** (Documentation and testing) -> http://54.151.11.102/docs#/~
 
 ## **Features**
 - CSV file upload
